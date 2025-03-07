@@ -1,12 +1,12 @@
-# 1️⃣ Usar una imagen de Maven con JDK 21 para compilar
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+# 1️⃣ Usar Maven con JDK 21 en la imagen final (evita errores de mvn not found)
+FROM maven:3.9.6-eclipse-temurin-21
 WORKDIR /app
-COPY backend/ .
-RUN mvn clean package -DskipTests
 
-# 2️⃣ Crear una imagen final optimizada con OpenJDK 21
-FROM openjdk:21
-WORKDIR /app
-COPY --from=build /app/target/*.jar backend.jar
+# 2️⃣ Monteamos el código fuente para que se actualice automáticamente
+VOLUME /app
+
+# 3️⃣ Exponemos el puerto del backend
 EXPOSE 8080
-CMD ["java", "-jar", "backend.jar"]
+
+# 4️⃣ Ejecutamos el backend en modo desarrollo para que recargue cambios
+CMD ["mvn", "spring-boot:run"]
