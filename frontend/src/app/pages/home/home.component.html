@@ -1,0 +1,56 @@
+<!-- Sección principal: Hero -->
+<div class="home-hero d-flex flex-column justify-content-center align-items-center text-center text-white px-3">
+    <!-- Capa de oscurecimiento encima del fondo -->
+    <div class="overlay"></div>
+
+    <!-- Contenido centrado del hero -->
+    <div class="content animate-fade-in">
+        <!-- Título principal -->
+        <h1 class="display-1 fw-bold mb-4 shadow-text">EL PODER DEL AHORRO</h1>
+
+        <!-- Subtítulo o frase introductoria -->
+        <p class="lead mb-5 shadow-text">
+            Controlá tus ingresos, optimizá tus gastos y alcanzá tus sueños financieros más rápido de lo que imaginás.
+        </p>
+
+        <!-- Botones principales: Registro y Login -->
+        <div class="d-grid gap-3 col-10 col-sm-6 col-md-4 mx-auto">
+            <a class="btn glass-button btn-lg fw-bold animate-grow" [routerLink]="['/register']">¡Empieza a ahorrar!</a>
+            <a class="btn glass-button-outline btn-lg fw-bold animate-grow" [routerLink]="['/login']">Iniciar sesión</a>
+        </div>
+
+    </div>
+</div>
+
+<!-- Sección de beneficios -->
+<section class="benefits-section py-5 px-3">
+    <div class="container text-center">
+        <div class="row">
+            <!-- Primer beneficio: Visualización Inteligente -->
+            <div class="col-md-4 mb-5 animate-fade-up">
+                <i class="bi bi-graph-up-arrow display-4 text-primary mb-3"></i>
+                <h4 class="fw-bold mb-3">Visualización Inteligente</h4>
+                <p>Gráficos simples y potentes para entender tu situación financiera al instante.</p>
+            </div>
+
+            <!-- Segundo beneficio: Ahorro Automatizado -->
+            <div class="col-md-4 mb-5 animate-fade-up">
+                <i class="bi bi-piggy-bank-fill display-4 text-success mb-3"></i>
+                <h4 class="fw-bold mb-3">Ahorro Automatizado</h4>
+                <p>Configurá objetivos y dejá que la app te ayude a seguir tu plan de ahorro.</p>
+            </div>
+
+            <!-- Tercer beneficio: Logros y Motivación -->
+            <div class="col-md-4 mb-5 animate-fade-up">
+                <i class="bi bi-award-fill display-4 text-warning mb-3"></i>
+                <h4 class="fw-bold mb-3">Logros y Motivación</h4>
+                <p>Celebrá tus avances y mantenete motivado mes a mes con nuestras insignias.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer: Frase motivadora -->
+<footer class="text-center text-muted py-4 animate-fade-in">
+    <p class="mb-0">"La verdadera riqueza es la capacidad de controlar tu dinero." — El que decidió ahorrar hoy</p>
+</footer>

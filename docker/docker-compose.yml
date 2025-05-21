@@ -33,8 +33,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     volumes:
-      - ../backend:/app # 🔥 Montea el código fuente en el contenedor
-      - ~/.m2:/root/.m2 # 🔥 Cachea dependencias Maven para evitar descargas repetidas
+      - ../backend:/app
+      - ~/.m2:/root/.m2
     networks:
       - tfg_network
 
@@ -46,10 +46,13 @@ services:
     restart: always
     ports:
       - "4200:4200"
+    volumes:
+      - ../frontend:/app
     depends_on:
       - backend
     networks:
       - tfg_network
+
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

@@ -1,0 +1,25 @@
+<div class="min-vh-100 d-flex flex-column justify-content-center align-items-center login-background text-center px-3">
+    <div class="card p-4 shadow-lg animate-fade-in glass-card" style="width: 100%; max-width: 400px;">
+        <h2 class="mb-4 text-primary fw-bold">Iniciar Sesión</h2>
+
+        <form (ngSubmit)="onSubmit()" [formGroup]="loginForm" novalidate>
+            <div class="mb-3 text-start">
+                <input type="text" formControlName="userName" class="form-control" placeholder="Nombre de usuario"
+                    required />
+            </div>
+
+            <div class="mb-3 text-start">
+                <input type="password" formControlName="password" class="form-control" placeholder="Contraseña"
+                    required />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 fw-bold animate-grow" [disabled]="loginForm.invalid">
+                Entrar
+            </button>
+        </form>
+
+        <div *ngIf="error" class="alert alert-danger mt-3 animate-fade-in">
+            {{ error }}
+        </div>
+    </div>
+</div>

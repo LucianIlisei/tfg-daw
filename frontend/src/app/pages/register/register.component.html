@@ -1,0 +1,61 @@
+<div class="min-vh-100 d-flex flex-column justify-content-center align-items-center bg-light text-center px-3">
+    <div class="card p-4 shadow-lg" style="width: 100%; max-width: 500px;">
+        <h2 class="mb-4 text-primary">Crear Cuenta</h2>
+
+        <form (ngSubmit)="onSubmit()" [formGroup]="registerForm" novalidate>
+
+            <!-- Nombre completo -->
+            <div class="mb-3 text-start">
+                <input type="text" formControlName="name" class="form-control" placeholder="Nombre completo" />
+                <div *ngIf="registerForm.get('name')?.invalid && (registerForm.get('name')?.touched || registerForm.get('name')?.dirty)"
+                    class="text-danger small mt-1">
+                    <div *ngIf="registerForm.get('name')?.errors?.['required']">El nombre es obligatorio.</div>
+                </div>
+            </div>
+
+            <!-- Nombre de usuario -->
+            <div class="mb-3 text-start">
+                <input type="text" formControlName="userName" class="form-control" placeholder="Nombre de usuario" />
+                <div *ngIf="registerForm.get('userName')?.invalid && (registerForm.get('userName')?.touched || registerForm.get('userName')?.dirty)"
+                    class="text-danger small mt-1">
+                    <div *ngIf="registerForm.get('userName')?.errors?.['required']">El nombre de usuario es obligatorio.
+                    </div>
+                    <div *ngIf="registerForm.get('userName')?.errors?.['minlength']">Debe tener mínimo 5 caracteres.
+                    </div>
+                    <div *ngIf="registerForm.get('userName')?.errors?.['maxlength']">Máximo 12 caracteres permitidos.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3 text-start">
+                <input type="email" formControlName="email" class="form-control" placeholder="Email" />
+                <div *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)"
+                    class="text-danger small mt-1">
+                    <div *ngIf="registerForm.get('email')?.errors?.['required']">El email es obligatorio.</div>
+                    <div *ngIf="registerForm.get('email')?.errors?.['email']">Debe ser un email válido.</div>
+                </div>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="mb-3 text-start">
+                <input type="password" formControlName="password" class="form-control" placeholder="Contraseña" />
+                <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)"
+                    class="text-danger small mt-1">
+                    <div *ngIf="registerForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</div>
+                    <div *ngIf="registerForm.get('password')?.errors?.['minlength']">Mínimo 5 caracteres.</div>
+                </div>
+            </div>
+
+            <!-- Botón de registro -->
+            <button type="submit" class="btn btn-primary w-100">
+                Crear cuenta
+            </button>
+        </form>
+
+        <!-- Mensaje de error general -->
+        <div *ngIf="error" class="alert alert-danger mt-3">
+            {{ error }}
+        </div>
+    </div>
+</div>
