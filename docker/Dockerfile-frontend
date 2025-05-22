@@ -1,19 +1,13 @@
-# Imagen base de Node
 FROM node:22
 
-# Carpeta de trabajo dentro del contenedor
+# Carpeta de trabajo en el contenedor
 WORKDIR /app
 
-# Copiar los archivos necesarios para instalar dependencias
-COPY frontend/package*.json ./
+# Angular CLI global
+RUN npm install -g @angular/cli
 
-# Instalar dependencias de Angular (npm install)
-RUN npm install
-
-# Copiar el resto del código fuente
-COPY frontend/ .
-
-# Exponer el puerto del servidor Angular
+# Exponer puerto 4200 para Angular
 EXPOSE 4200
 
-CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "4200", "--disable-host-check"]
+# Ejecutar ng serve sobre tu código montado
+CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "4200"]
