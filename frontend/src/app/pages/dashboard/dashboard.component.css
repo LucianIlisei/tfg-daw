@@ -123,3 +123,24 @@
   font-weight: bold;
   padding: 0.5rem;
 }
+
+.list-group-item {
+  background: rgba(255, 255, 255, 0.25); /* Aumenta opacidad */
+  border: none;
+  color: white;
+  margin-bottom: 6px;
+  border-radius: 0.6rem;
+  font-weight: 500;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s, transform 0.2s;
+}
+
+.list-group-item:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.01);
+}
+
+.list-group-item span {
+  font-weight: bold;
+}

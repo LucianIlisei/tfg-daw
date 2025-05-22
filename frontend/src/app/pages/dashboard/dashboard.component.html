@@ -29,10 +29,11 @@
             <button class="btn btn-success fw-bold mx-2 animate-grow" (click)="abrirModal('INGRESO')">Añadir
                 ingreso</button>
             <button class="btn btn-danger fw-bold mx-2 animate-grow" (click)="abrirModal('GASTO')">Añadir gasto</button>
+            <button class="btn btn-info fw-bold mx-2 animate-grow" (click)="abrirModalAnalisis()">Análisis</button>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal Movimiento -->
     <div class="modal fade" id="modalMovimiento" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content p-3 glass-card">
@@ -55,6 +56,59 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal Análisis -->
+    <div class="modal fade" id="modalAnalisis" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content p-4 glass-card">
+                <div class="modal-header">
+                    <h5 class="modal-title">Análisis de Gastos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div *ngIf="analisisGastos.length === 0" class="text-white-50">No hay datos de gastos suficientes.
+                    </div>
+                    <ul class="list-group mb-3">
+                        <li *ngFor="let item of analisisGastos"
+                            class="list-group-item d-flex justify-content-between align-items-center bg-dark text-white border-secondary">
+                            <div>
+                                <strong>{{ item.categoria }}</strong><br />
+                                <small class="text-white-50">{{ formatEuro(item.total) }} gastado</small>
+                            </div>
+                            <span class="fw-bold">{{ item.porcentaje.toFixed(1) }}%</span>
+                        </li>
+                    </ul>
+
+                    <div *ngIf="analisisGastos.length > 0">
+                        <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="pieChartType">
+                        </canvas>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historial -->
+    <div class="container mt-5" style="max-width: 800px;">
+        <h4 class="text-white mb-3 fw-bold">Historial de transacciones</h4>
+        <div *ngIf="transacciones.length === 0" class="text-white-50">No hay transacciones registradas.</div>
+        <ul class="list-group">
+            <li *ngFor="let tx of obtenerTransaccionesVisibles()"
+                class="list-group-item d-flex justify-content-between align-items-center">
+                <div><span class="fw-semibold">{{ tx.type }}</span> — {{ tx.description }}</div>
+                <span [ngClass]="{ 'text-success': tx.type === 'INGRESO', 'text-danger': tx.type === 'GASTO' }">{{
+                    formatEuro(tx.amount) }}</span>
+            </li>
+        </ul>
+        <div class="mt-2" *ngIf="transacciones.length > 3">
+            <button class="btn btn-link text-white-50" (click)="toggleMostrarTodas()">
+                {{ mostrarTodas ? 'Ver menos' : 'Ver más' }}
+            </button>
         </div>
     </div>
 </div>
