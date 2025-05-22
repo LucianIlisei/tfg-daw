@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,17 +51,18 @@ public class UserController {
 
     // 📝 POST /api/users/register — Registra un nuevo usuario
     @PostMapping("/register")
-    public ResponseEntity<?> create(@Valid @RequestBody User user, BindingResult result) {
-        // Si hay errores de validación, respondemos con los errores
-        if (result.hasErrors()) {
-            return validator(result);
+    public ResponseEntity<?> create(@Valid @RequestBody User user) {
+        try {
+            User savedUser = service.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+        } catch (DataIntegrityViolationException e) {
+            // Detecta si la causa fue clave duplicada
+            String message = "Este email o nombre de usuario ya está registrado.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", message));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error", "Error interno del servidor."));
         }
-
-        // Encriptamos la contraseña antes de guardar el usuario
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        // Guardamos y devolvemos el usuario creado con estado 201
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));
     }
 
     // 🔧 Método auxiliar para formatear errores de validación en un mapa

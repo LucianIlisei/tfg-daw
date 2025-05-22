@@ -13,11 +13,8 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterModule]
 })
 export class RegisterComponent {
-  // Formulario reactivo y variable para errores
   registerForm: FormGroup;
-  error: string = '';
 
-  // 🔧 Constructor con inyección de dependencias y creación del formulario
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
     this.registerForm = this.fb.group({
       userName: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(12)]],
@@ -27,11 +24,7 @@ export class RegisterComponent {
     });
   }
 
-  // Método que se ejecuta al enviar el formulario
   onSubmit() {
-    this.error = ''; // Limpiar errores anteriores
-
-    // Si el formulario es inválido, marcamos los campos como tocados y salimos
     if (this.registerForm.invalid) {
       Object.keys(this.registerForm.controls).forEach(field => {
         const control = this.registerForm.get(field);
@@ -42,10 +35,8 @@ export class RegisterComponent {
       return;
     }
 
-    // Hacemos la petición POST para registrar el usuario
     this.http.post<any>('http://localhost:8080/api/users/register', this.registerForm.value).subscribe({
-      next: (response) => {
-        // Alerta de éxito al registrar correctamente
+      next: () => {
         import('sweetalert2').then(Swal => {
           Swal.default.fire({
             icon: 'success',
@@ -53,21 +44,22 @@ export class RegisterComponent {
             text: 'Tu cuenta ha sido creada correctamente.',
             confirmButtonText: 'Iniciar sesión',
             confirmButtonColor: '#3085d6'
-          }).then(() => {
-            // Redirigimos al login tras el registro
-            this.router.navigate(['/login']);
-          });
+          }).then(() => this.router.navigate(['/login']));
         });
       },
       error: (err) => {
-        console.error('Error al registrar', err);
+        const mensaje =
+          err.error?.error ||
+          'Error al registrar el usuario. Verifica si el email o nombre de usuario ya están en uso.';
 
-        // Manejamos errores del backend y los mostramos como texto
-        if (err.error && typeof err.error === 'object') {
-          this.error = Object.values(err.error).join(' ');
-        } else {
-          this.error = 'Hubo un problema al registrar.';
-        }
+        import('sweetalert2').then(Swal => {
+          Swal.default.fire({
+            icon: 'error',
+            title: 'Registro fallido',
+            text: mensaje,
+            confirmButtonColor: '#d33'
+          });
+        });
       }
     });
   }
