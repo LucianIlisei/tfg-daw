@@ -38,19 +38,6 @@ services:
     networks:
       - tfg_network
 
-  frontend:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile-frontend
-    container_name: frontend-container
-    restart: always
-    ports:
-      - "4200:4200"
-    depends_on:
-      - backend
-    networks:
-    - tfg_network
-
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

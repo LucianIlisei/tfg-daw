@@ -1,4 +1,3 @@
-// Importaciones necesarias para formularios, peticiones HTTP, navegación y módulos esenciales
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -14,6 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  error: string = ''; // ✅ AÑADIDO para que no falle el HTML
 
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
     this.registerForm = this.fb.group({
@@ -25,6 +25,8 @@ export class RegisterComponent {
   }
 
   onSubmit() {
+    this.error = ''; // Reiniciar mensaje de error
+
     if (this.registerForm.invalid) {
       Object.keys(this.registerForm.controls).forEach(field => {
         const control = this.registerForm.get(field);
@@ -51,6 +53,8 @@ export class RegisterComponent {
         const mensaje =
           err.error?.error ||
           'Error al registrar el usuario. Verifica si el email o nombre de usuario ya están en uso.';
+
+        this.error = mensaje;
 
         import('sweetalert2').then(Swal => {
           Swal.default.fire({
