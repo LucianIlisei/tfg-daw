@@ -46,10 +46,13 @@ services:
     restart: always
     ports:
       - "4200:4200"
+    volumes:
+      - ../frontend:/app
     depends_on:
       - backend
     networks:
       - tfg_network
+
 
 
   phpmyadmin:
