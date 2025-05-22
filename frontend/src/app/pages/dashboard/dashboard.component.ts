@@ -1,3 +1,4 @@
+// Importaciones de Angular y librerías externas necesarias
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -7,8 +8,9 @@ import { ChartType, ChartConfiguration } from 'chart.js';
 import { NgChartsModule } from 'ng2-charts';
 import Swal from 'sweetalert2';
 
-declare const bootstrap: any;
+declare const bootstrap: any; // Importamos Bootstrap JS para manejar modales manualmente
 
+// Decorador del componente con configuración standalone
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -17,6 +19,7 @@ declare const bootstrap: any;
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule, NgChartsModule]
 })
 export class DashboardComponent implements OnInit {
+  // ==================== Usuario y estado financiero ====================
   username: string = '';
   totalBalance: number = 0;
   totalIngresos: number = 0;
@@ -24,6 +27,7 @@ export class DashboardComponent implements OnInit {
   transacciones: any[] = [];
   mostrarTodas: boolean = false;
 
+  // ==================== Añadir movimiento ====================
   tipoMovimiento: 'INGRESO' | 'GASTO' = 'INGRESO';
   movimientoForm: FormGroup;
 
@@ -35,6 +39,7 @@ export class DashboardComponent implements OnInit {
   ];
   categorias: string[] = this.categoriasGasto;
 
+  // ==================== Análisis de gastos ====================
   analisisGastos: { categoria: string, porcentaje: number, total: number }[] = [];
   mostrarGrafico: boolean = false;
 
@@ -52,6 +57,7 @@ export class DashboardComponent implements OnInit {
     }
   };
 
+  // ==================== Constructor ====================
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
     this.movimientoForm = this.fb.group({
       amount: [0, [Validators.required, Validators.min(0.01)]],
@@ -59,11 +65,13 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  // ==================== Lifecycle hook ====================
   ngOnInit(): void {
     this.username = localStorage.getItem('username') || 'usuario';
     this.cargarTransacciones();
   }
 
+  // ==================== Cargar y procesar transacciones ====================
   cargarTransacciones() {
     this.http.get<any[]>('http://localhost:8080/api/transactions', {
       headers: {
@@ -88,10 +96,7 @@ export class DashboardComponent implements OnInit {
           this.totalBalance -= validAmount;
 
           const categoria = tx.description;
-          if (!categoriasSuma[categoria]) {
-            categoriasSuma[categoria] = 0;
-          }
-          categoriasSuma[categoria] += validAmount;
+          categoriasSuma[categoria] = (categoriasSuma[categoria] || 0) + validAmount;
         }
       });
 
@@ -104,6 +109,7 @@ export class DashboardComponent implements OnInit {
         total: cantidad
       })).sort((a, b) => b.porcentaje - a.porcentaje);
 
+      // Datos para gráfico de pastel
       this.pieChartData = {
         labels: this.analisisGastos.map(item => item.categoria),
         datasets: [{
@@ -114,6 +120,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  // ==================== Mostrar últimas transacciones ====================
   obtenerTransaccionesVisibles(): any[] {
     return this.mostrarTodas ? this.transacciones : this.transacciones.slice(0, 3);
   }
@@ -122,6 +129,7 @@ export class DashboardComponent implements OnInit {
     this.mostrarTodas = !this.mostrarTodas;
   }
 
+  // ==================== Abrir modales Bootstrap ====================
   abrirModal(tipo: 'INGRESO' | 'GASTO') {
     this.tipoMovimiento = tipo;
     this.categorias = tipo === 'INGRESO' ? this.categoriasIngreso : this.categoriasGasto;
@@ -135,13 +143,14 @@ export class DashboardComponent implements OnInit {
     modal.show();
   }
 
+  // ==================== Guardar movimiento financiero ====================
   guardarMovimiento() {
     const movimiento = {
       ...this.movimientoForm.value,
       type: this.tipoMovimiento
     };
 
-    movimiento.amount = Math.max(0, movimiento.amount);
+    movimiento.amount = Math.max(0, movimiento.amount); // Seguridad básica
 
     const token = localStorage.getItem('token');
 
@@ -162,6 +171,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  // ==================== Cierre de sesión ====================
   logout() {
     Swal.fire({
       title: '¿Cerrar sesión?',
@@ -181,6 +191,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  // ==================== Formatear números a formato € ====================
   formatEuro(value: number): string {
     return new Intl.NumberFormat('es-ES', {
       style: 'currency',
