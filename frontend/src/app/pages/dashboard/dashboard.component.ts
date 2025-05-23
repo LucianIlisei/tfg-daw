@@ -100,7 +100,6 @@ export class DashboardComponent implements OnInit {
         }
       });
 
-      this.totalBalance = Math.max(0, this.totalBalance);
 
       const totalGastosValido = Object.values(categoriasSuma).reduce((a, b) => a + b, 0);
       this.analisisGastos = Object.entries(categoriasSuma).map(([categoria, cantidad]) => ({
