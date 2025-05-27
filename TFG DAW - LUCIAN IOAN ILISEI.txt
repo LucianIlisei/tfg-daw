@@ -1,0 +1,23 @@
+TFG DAW - LUCIAN IOAN ILISEI
+
+Pasos para iniciar el proyecto.
+
+1. Clonamos el proyecto en el directorio que queramos.
+git clone https://github.com/LucianIlisei/tfg-daw.git
+
+2. Entramos en la carpeta del frontend
+cd frontend
+
+3. Instalamos la dependencias
+npm install
+
+4. Iniciamos el frontend
+ng serve
+
+5. En otra terminal entramos en la carpeta del Docker
+cd Docker
+
+6. Buildeamos los contenedores y los iniciamos
+docker compose up --build -d
+
+Se inicia phpMyAdmin, MySQL y SpringBoot con el docker y el frontend se inicia aparte debido a los errores que me daba cuando intentaba iniciarlo todo junto
